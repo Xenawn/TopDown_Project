@@ -11,6 +11,7 @@ public class DustParticleControl : MonoBehaviour
     {
         if (createDustOnWalk)
         {
+
             dustParticleSystem.Stop();
             dustParticleSystem.Play();
         }
