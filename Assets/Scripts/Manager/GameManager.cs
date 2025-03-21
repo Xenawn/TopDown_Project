@@ -25,6 +25,10 @@ public class GameManager : MonoBehaviour
         uiManager = FindObjectOfType<UIManager>();
         enemyManager = GetComponentInChildren<EnemyManager>();
         enemyManager.Init(this);
+
+        _playerResourceController = player.GetComponent<ResourceController>();
+        _playerResourceController.RemoveHealthChangeEvent(uiManager.ChangePlayerHP);
+        _playerResourceController.AddHealthChangeEvent(uiManager.ChangePlayerHP);
     }
 
     private void Start()
@@ -48,6 +52,7 @@ public class GameManager : MonoBehaviour
     {
         currentWaveIndex += 1;
         enemyManager.StartWave(1 + currentWaveIndex / 5);
+        uiManager.ChangeWave(currentWaveIndex);
     }
 
     public void EndOfWave()
@@ -58,6 +63,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         enemyManager.StopWave();
+        uiManager.SetGameOver();
     }
 
     
