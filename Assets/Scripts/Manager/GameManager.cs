@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -13,18 +14,33 @@ public class GameManager : MonoBehaviour
 
     private EnemyManager enemyManager;
 
+    private UIManager uiManager;
+    public static bool isFirstLoading = true;
     private void Awake()
     {
         instance = this;
         player = FindObjectOfType<PlayerController>();
         player.Init(this);
 
+        uiManager = FindObjectOfType<UIManager>();
         enemyManager = GetComponentInChildren<EnemyManager>();
         enemyManager.Init(this);
     }
 
+    private void Start()
+    {
+        if (!isFirstLoading)
+        {
+            StartGame();
+        }
+        else
+        {
+            isFirstLoading = false;
+        }
+    }
     public void StartGame()
     {
+        uiManager.SetPlayGame();
         StartNextWave();
     }
 
@@ -44,11 +60,5 @@ public class GameManager : MonoBehaviour
         enemyManager.StopWave();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            StartGame();
-        }
-    }
+    
 }
