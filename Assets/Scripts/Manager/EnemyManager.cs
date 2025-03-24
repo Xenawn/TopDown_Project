@@ -25,6 +25,7 @@ public class EnemyManager : MonoBehaviour
 
     GameManager gameManager;
 
+    [SerializeField] private List<GameObject> itemPrefabs;
     public void Init(GameManager gameManager)
     {
         this.gameManager = gameManager;
@@ -114,11 +115,19 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public void RemoveEnemyOnDeath(EnemyController enemy)
+    public void RemoveEnemyOnDeath(EnemyController enemy) // 에너미가 죽었을때 호출
     {
         activeEnemies.Remove(enemy);
+        CreateRandomItem(enemy.transform.position); // 에너미가 죽으면 드롭 형태
         if (enemySpawnComplite && activeEnemies.Count == 0)
             gameManager.EndOfWave();
+
+        
+    }
+
+    public void CreateRandomItem(Vector3 position)
+    {
+        GameObject item = Instantiate(itemPrefabs[Random.Range(0, itemPrefabs.Count)],position, Quaternion.identity);  
     }
 
 

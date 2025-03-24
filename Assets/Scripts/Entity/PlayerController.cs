@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -57,6 +58,26 @@ public class PlayerController : BaseController
         if (EventSystem.current.IsPointerOverGameObject()) // UI에 올려뒀을때 작동 안함
             return;
         isAttacking = inputValue.isPressed;
+    }
+
+    public void UseItem(ItemData item)
+    {
+
+        foreach(StatEntry modifier in item.statModifiers)
+        {
+            statHandler.ModifyStat(modifier.statType, modifier.baseValue, !item.isTemporary, modifier.baseValue);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.TryGetComponent<ItemHandler>(out ItemHandler handler))
+        {
+            if (handler.ItemData == null)
+                return;
+            UseItem(handler.ItemData);
+            Destroy(handler.gameObject);
+        }
     }
 
 }
